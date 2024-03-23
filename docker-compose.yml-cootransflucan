@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  mariaDB:
+    container_name: mariaDB
+    image: mariadb:10.6.14
+    environment:
+      - MARIADB_USER=krlos 
+      - MARIADB_PASSWORD=//654321
+      - MARIADB_ROOT_PASSWORD=//654321
+      - MARIADB_DATABASE=cootransflucan
+    volumes:
+      - ./mariaDB:/var/lib/mysql
+    ports:
+      - 3306:3306
+
+  phpmyadmin:
+    depends_on:
+      - mariaDB
+    container_name: phpmyadmin
+    image: phpmyadmin:5.2.1-apache
+    environment:
+      - PMA_ARBITRARY=1
+    ports:
+      - 8181:80
+
+  composer:
+    depends_on:
+      - mariaDB
+    container_name: composer
+    image: composer:2.5.7
+    volumes:
+      - ./:cootransflucan/
